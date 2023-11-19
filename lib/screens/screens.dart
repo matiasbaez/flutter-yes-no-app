@@ -1,2 +1,2 @@
 
-export 'package:yes_no_app/screens/chat_screen.dart';
+export 'package:yes_no_app/screens/chat/chat_screen.dart';
