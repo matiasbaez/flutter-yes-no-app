@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+import 'package:yes_no_app/domain/entities/message.dart';
+
+import 'package:yes_no_app/providers/providers.dart';
 import 'package:yes_no_app/widgets/widgets.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -31,6 +35,10 @@ class _ChatView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // final chatProvider = Provider.of<ChatProvider>(context, listen: true);
+    final chatProvider = context.watch<ChatProvider>();
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric( horizontal: 10 ),
@@ -39,16 +47,18 @@ class _ChatView extends StatelessWidget {
 
             Expanded(
               child: ListView.builder(
-                itemCount: 50,
+                controller: chatProvider.chatScrollController,
+                itemCount: chatProvider.messages.length,
                 itemBuilder: (context, index) {
-                  return index % 2 == 0
-                    ? MessageBubble(message: 'Lorem ipsum dolor $index', alignment: CrossAxisAlignment.start )
-                    : MessageBubble(message: 'Lorem ipsum dolor $index', alignment: CrossAxisAlignment.end );
+                  final message = chatProvider.messages[index];
+                  return message.fromWho == FromWho.hers
+                    ? MessageBubble(message: message, alignment: CrossAxisAlignment.start )
+                    : MessageBubble(message: message, alignment: CrossAxisAlignment.end );
                 }
               )
             ),
 
-            const MessageFieldBox(),
+            MessageFieldBox(onSubmit: chatProvider.sendMessage),
 
           ],
         ),
