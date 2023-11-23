@@ -24,7 +24,7 @@ class MessageBubble extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: alignment == CrossAxisAlignment.start ? colors.secondary : colors.primary,
+            color: message.fromWho == FromWho.hers ? colors.secondary : colors.primary,
             borderRadius: BorderRadius.circular(20)
           ),
           child: Padding(
@@ -35,8 +35,8 @@ class MessageBubble extends StatelessWidget {
 
         const SizedBox( height: 10 ),
 
-        if (alignment == CrossAxisAlignment.start) ...[
-          const _ImageBubble(),
+        if (message.fromWho == FromWho.hers) ...[
+          _ImageBubble(imageUrl: message.imageUrl!),
           const SizedBox( height: 10 )
         ],
       ]
@@ -46,7 +46,12 @@ class MessageBubble extends StatelessWidget {
 
 class _ImageBubble extends StatelessWidget {
 
-  const _ImageBubble({super.key});
+  final String imageUrl;
+
+  const _ImageBubble({
+    super.key,
+    required this.imageUrl
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +61,7 @@ class _ImageBubble extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Image.network(
-        'https://yesno.wtf/assets/yes/0-c44a7789d54cbdcad867fb7845ff03ae.gif',
+        imageUrl,
         width: size.width * .7,
         height: 150,
         fit: BoxFit.cover,
